@@ -20,6 +20,9 @@ A GitHub Template for building **browser-runnable UI mocks** at maximum speed us
 
 The human approves at each `→`. Don't auto-advance.
 
+## Iterating after the first build
+Use `/refine <feedback>` for any change after the initial loop completes. It auto-detects depth (SURFACE / TARGETED / STRUCTURAL) and surgically patches only the affected docs and tasks — never regenerate SPEC.md or TASKS.md from scratch. Re-running `/spec` or `/tasks` from scratch should be reserved for full restarts.
+
 ## Conversation language
 The first line of `docs/REQUIREMENTS.md` is `Language: <name>` (e.g. `Language: 日本語`). This is set by `/discover` from the user's first message and is the **single source of truth** for what language to talk to the user in. Every command and subagent must read it and produce all human-facing output (summaries, AskUserQuestion text, gap reports, escalation messages, UI copy in JSX) in that language. Code, identifiers, file paths, and parser-critical keywords (`PASS`, `FAIL`, `[VISUAL]`, `STRUCTURAL_ESCALATION`, etc.) stay in English.
 

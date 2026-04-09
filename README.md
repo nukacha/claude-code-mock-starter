@@ -134,7 +134,36 @@ npm run dev
 ```
 Visit the URL it prints (usually http://127.0.0.1:5173) in your browser to see the finished mock.
 
-If you want to change something, just rerun `/discover` or talk to Claude Code directly about what needs adjusting.
+If you want to change something, the easiest path is **`/refine`** — see the next section.
+
+---
+
+## 🔁 When you're not happy with the result: `/refine`
+
+`/refine` takes natural-language feedback and figures out the smallest possible change to address it. **It will not regenerate everything from scratch** — it patches only the parts that need to change, so you don't lose your existing work.
+
+```
+/refine make the dashboard chart a line chart instead of bars
+/refine add a search box on the products page
+/refine the whole thing feels too corporate, make it more casual
+```
+
+It auto-detects the depth of your feedback and runs the minimum needed:
+
+| Depth | What `/refine` does | Examples |
+|--|--|--|
+| **SURFACE** | Edits 1–3 source files. Runs the visual-critic on affected pages. **No doc changes.** | "make the button bigger", "fix the typo in the header", "change card color to blue" |
+| **TARGETED** | Surgically updates the affected SPEC section + the affected TASKS entry. Runs builder→critic→fixer on just that one task. | "add a search box on the dashboard", "show product price in the card", "add a settings page" |
+| **STRUCTURAL** | Updates REQUIREMENTS.md surgically and asks how you want to propagate it (re-run `/spec`, surgical multi-section update, or just save for later). | "change target users from B2B to consumer", "make the whole thing dark-themed" |
+
+**Why this matters**: re-running the full `/discover → /spec → /tasks → /loop` pipeline for every small change wastes time and risks the AI re-deciding things you already approved. `/refine` keeps the work you already have.
+
+If `/refine` chooses the wrong depth, just tell it: "no, this is a bigger change than that" — it'll re-classify.
+
+### When NOT to use `/refine`
+- **Brand new screens that don't fit existing requirements** → use `/discover` to update REQUIREMENTS first, then continue
+- **You want to throw it all away and start over** → delete `docs/REQUIREMENTS.md`, `docs/SPEC.md`, `docs/TASKS.md` and run `/discover` from scratch
+- **A pure conversational tweak that's faster to just ask for** → just talk to Claude Code directly without any command. `/refine` is for when you want the change tracked through the doc/task system.
 
 ---
 
