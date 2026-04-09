@@ -20,6 +20,9 @@ A GitHub Template for building **browser-runnable UI mocks** at maximum speed us
 
 The human approves at each `→`. Don't auto-advance.
 
+## Conversation language
+The first line of `docs/REQUIREMENTS.md` is `Language: <name>` (e.g. `Language: 日本語`). This is set by `/discover` from the user's first message and is the **single source of truth** for what language to talk to the user in. Every command and subagent must read it and produce all human-facing output (summaries, AskUserQuestion text, gap reports, escalation messages, UI copy in JSX) in that language. Code, identifiers, file paths, and parser-critical keywords (`PASS`, `FAIL`, `[VISUAL]`, `STRUCTURAL_ESCALATION`, etc.) stay in English.
+
 ## Subagents
 - **builder** — writes/edits files under `src/`. Triggered for any task implementation.
 - **visual-critic** — uses Playwright MCP to verify the running mock against SPEC criteria. PASS/FAIL only, no edits.

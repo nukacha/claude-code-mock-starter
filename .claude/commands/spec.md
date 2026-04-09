@@ -7,8 +7,11 @@ allowed-tools: Read, Write, Edit, Glob, Grep
 
 Turn `docs/REQUIREMENTS.md` into a concrete implementation spec at `docs/SPEC.md`.
 
+## Language
+**Read the `Language:` field on the first line of `docs/REQUIREMENTS.md` and write all human-facing content in `docs/SPEC.md` in that language.** This includes the plain-language sections, summaries, and any messages back to the user. The technical content inside `<details>` blocks may stay in English (component names, file paths, types) since those are AI-facing.
+
 ## Audience reminder
-**The human reviewing `docs/SPEC.md` may be a non-engineer.** Write the visible parts of the document in plain Japanese/English that anyone can understand. Put technical details (component names, file paths, API shapes, prop types) inside `<details>` blocks so they don't clutter the human-facing view but are still available to AI agents that read the file later.
+**The human reviewing `docs/SPEC.md` may be a non-engineer.** Write the visible parts of the document in plain language (in the locked-in project language) that anyone can understand. Put technical details (component names, file paths, API shapes, prop types) inside `<details>` blocks so they don't clutter the human-facing view but are still available to AI agents that read the file later.
 
 ## Process
 

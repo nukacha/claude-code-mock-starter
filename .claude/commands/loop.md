@@ -7,6 +7,9 @@ allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task
 
 Execute `docs/TASKS.md` autonomously. The human has approved the spec and tasks; from here on, **only requirements changes and final review require human input**. Everything else — coding, building, screenshotting, critiquing, fixing — is yours.
 
+## Language
+**Read the `Language:` field on the first line of `docs/REQUIREMENTS.md` and produce all human-facing output in that language**: progress messages, the final report, escalation messages, and the "Blocked" section appended to TASKS.md. Pass this language preference to subagents (builder, visual-critic, fixer) when delegating, so their reports back to you also come in the right language.
+
 ## Preconditions
 - `docs/SPEC.md` and `docs/TASKS.md` exist. If not, stop and tell the user which command to run.
 - The Playwright MCP server is registered. If `mcp__playwright__*` tools are unavailable, stop and tell the user to run `claude mcp add playwright npx @playwright/mcp@latest`.

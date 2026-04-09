@@ -7,6 +7,9 @@ allowed-tools: Read, Write, Edit, Glob, Grep
 
 Decompose `docs/SPEC.md` into small, sequential tasks at `docs/TASKS.md` that the `/loop` command can execute one at a time.
 
+## Language
+**Read the `Language:` field on the first line of `docs/REQUIREMENTS.md` and write all human-facing content in `docs/TASKS.md` in that language.** Task titles, "what the user will see when done" descriptions, and the final summary must all be in the locked-in project language. The technical content inside `<details>` blocks may stay in English.
+
 ## Audience reminder
 **The human reviewing `docs/TASKS.md` may be a non-engineer.** They need to understand "what each task will produce" without reading code. Each task has two parts:
 - **Visible by default**: plain-language description of what the user will see when the task is done — written so a non-technical reader can decide "yes, that's what I want"

@@ -1,8 +1,15 @@
+Language: English
+
 # Requirements / 要件定義
 
 > このファイルは `/discover` コマンドで対話形式に埋めていきます。
 > This file is filled in interactively via the `/discover` command.
 > 直接編集も可能ですが、内容が確定したら必ず人間がレビューしてください。
+>
+> **The first line `Language: <name>` is read by every command and subagent**
+> to decide what language to talk to you in. `/discover` sets it from your
+> first message; you can also edit it manually (e.g. `Language: 日本語`,
+> `Language: English`, `Language: 中文`).
 
 ## 1. Overview / 概要
 - **Product name / プロダクト名**:
