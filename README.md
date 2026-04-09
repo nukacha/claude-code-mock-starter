@@ -8,67 +8,76 @@ The human only describes what they want and reviews the result. Claude Code hand
 
 ---
 
-## ✨ Features
+## ✨ What you get
 
-- **Interactive requirements gathering** — the `/discover` command interviews you to turn vague ideas into an implementable spec.
-- **Spec-driven workflow** — `REQUIREMENTS → SPEC → TASKS → implementation`, with a human review gate at each step.
-- **Visual self-improvement loop** — Playwright MCP screenshots the running mock, AI verifies against the spec, fixes its own gaps.
-- **Enforced quality gates** — every file edit triggers a hook that runs `tsc` and `eslint`. Failures force the AI to self-correct.
+- 🗣 **Start from a vague idea.** `/discover` interviews you and writes down concrete requirements for you.
+- 👀 **The AI checks its own work.** Playwright MCP takes screenshots of the running mock, and the AI verifies them against your spec — no manual QA required.
+- ✋ **You review 3 times, not 30.** Human approval gates at `REQUIREMENTS → SPEC → TASKS`. Everything else is hands-off.
+- 🧰 **Zero stack decisions.** Vite + React + TypeScript + Tailwind + shadcn/ui + MSW + React Router, pre-wired.
+
+<details>
+<summary>More capabilities (click to expand)</summary>
+
+- **Spec-driven workflow** — every phase writes a human-readable document, so you can review (and edit) what the AI is about to do before it does it.
+- **Enforced quality gates** — every file edit triggers a hook that runs `tsc` and `eslint`. Failures force the AI to self-correct before moving on.
 - **Cross-platform** — macOS / Linux / Windows (WSL2 recommended).
-- **Fixed stack for reproducibility** — Vite + React + TypeScript + Tailwind + shadcn/ui + MSW + React Router. No bikeshedding.
-- **Quality bar tuned for client-facing proposals** — the visual-critic tags gaps by category (`[VISUAL] [DATA] [INTERACTION] [STRUCTURAL]`) and the fixer escalates structural mismatches back to the builder for proper rebuild instead of taping over them.
+- **Proposal-grade quality bar** — the visual-critic tags gaps by category (`[VISUAL] [DATA] [INTERACTION] [STRUCTURAL]`) and the fixer escalates structural mismatches back to the builder for a proper rebuild instead of taping over them. Keeps the output presentable for client-facing work.
+- **Iterate without losing work** — `/refine` surgically updates just the affected docs and code, so you don't have to re-run the whole pipeline for small changes.
+
+</details>
 
 ---
 
 ## 🚀 Quick Start
 
-### 0. Prerequisites
-You only need two things, even as a non-developer.
-
-#### Required
+### 0. Install two things
 
 | Tool | Install |
 |--|--|
-| **Claude Code** (native) | macOS / Linux / WSL: `curl -fsSL https://claude.ai/install.sh \| bash`<br>Windows (PowerShell): `irm https://claude.ai/install.ps1 \| iex`<br>Homebrew: `brew install --cask claude-code`<br>Official docs: <https://docs.claude.com/en/docs/claude-code/quickstart> |
-| **Node.js 24+** | Official installer: <https://nodejs.org/en/download> (pick latest LTS)<br>Required because the template uses React/Vite. |
+| **Claude Code** (native) | macOS / Linux / WSL: `curl -fsSL https://claude.ai/install.sh \| bash`<br>Windows (PowerShell): `irm https://claude.ai/install.ps1 \| iex`<br>Homebrew: `brew install --cask claude-code` |
+| **Node.js 24+** | <https://nodejs.org/en/download> (latest LTS) |
 
-> 💡 Claude Code itself used to require Node.js, but the **native installer** is now the official recommended path. Node.js is only needed for the React app build.
-
-#### Optional
-
-| Nice to have | Use case |
-|--|--|
-| **Git** (<https://git-scm.com/downloads>) | Only if you want version control. The "Download ZIP" path below works without Git. |
-
-After installing, verify in a terminal (macOS Terminal app, Windows PowerShell, or WSL2 shell):
+Verify in a terminal:
 ```bash
 claude --version
 node -v       # → v24.0.0 or higher
 ```
 
+<details>
+<summary>Optional tools & notes</summary>
+
+- **Git** (<https://git-scm.com/downloads>) — only needed if you want to version-control your mock. The "Download ZIP" path in step 1 works without Git.
+- Claude Code used to require Node.js, but the **native installer is now the official recommended path**. Node.js is only needed for the React app build.
+- Official Claude Code docs: <https://docs.claude.com/en/docs/claude-code/quickstart>
+
+</details>
+
 ### 1. Get the template
-Pick whichever fits you.
 
-**Option A (easiest, no Git needed)**: Download ZIP
+**Easiest path — Download ZIP** (no Git required):
 1. Open <https://github.com/nukacha/claude-code-mock-starter>
-2. Click the green "**Code**" button → "**Download ZIP**"
-3. Unzip wherever you like
-4. `cd path/to/claude-code-mock-starter-main` in your terminal
+2. Click the green **Code** button → **Download ZIP**
+3. Unzip and `cd path/to/claude-code-mock-starter-main` in your terminal
 
-**Option B (recommended for managing as your own repo)**: Use this template (requires GitHub account)
+<details>
+<summary>Other ways to get the template (Use this template, degit)</summary>
+
+**Use this template** (if you want your own GitHub repo):
 1. Open <https://github.com/nukacha/claude-code-mock-starter>
-2. Click "**Use this template**" → "Create a new repository" → name it
+2. Click **Use this template** → **Create a new repository** → name it
 3. Clone your new repo (requires Git):
    ```bash
    git clone https://github.com/<your-username>/<your-repo>.git
    cd <your-repo>
    ```
 
-**Option C (one command)**: degit (requires Node.js, no Git)
+**degit** (one command, no Git needed, requires Node.js):
 ```bash
 npx degit nukacha/claude-code-mock-starter my-mock
 cd my-mock
 ```
+
+</details>
 
 ### 2. Install dependencies
 Inside the project folder:
@@ -78,22 +87,31 @@ npm run msw:init
 ```
 First install takes a few minutes. If you hit errors, double-check `node -v` is 24+.
 
-### 3. Install Chromium for Playwright (required)
-The AI uses Playwright to screenshot the running mock and check its own work. Playwright needs a real browser binary, so download Chromium first:
+### 3. Install Chromium for Playwright
+The AI screenshots the mock to verify its own work. Download Chromium once:
 ```bash
 npx -y playwright@latest install chromium
 ```
-First run downloads a few hundred MB; expect a few minutes.
+First run downloads a few hundred MB — expect a few minutes.
 
-**Linux / WSL2 users also need system libraries**:
+<details>
+<summary>Linux / WSL2: also install system libraries</summary>
+
 ```bash
 sudo npx -y playwright@latest install-deps chromium
 ```
 Enter your machine login password if prompted. Not needed on macOS / native Windows.
 
-> 💡 **You do NOT need to run `claude mcp add playwright ...`.** This template embeds the Playwright MCP server definition directly inside the [visual-critic agent](.claude/agents/visual-critic.md), so it spins up automatically when needed and shuts down when the agent finishes. The first time you run `/iterate` (or `/review`), Claude Code will show a security prompt asking you to approve the embedded server — click approve once and you're done.
->
-> Browser cache location: macOS `~/Library/Caches/ms-playwright/`, Linux/WSL `~/.cache/ms-playwright/`, Windows `%USERPROFILE%\AppData\Local\ms-playwright\`
+</details>
+
+<details>
+<summary>Why there is no <code>claude mcp add</code> step</summary>
+
+This template embeds the Playwright MCP server definition directly inside the [visual-critic agent](.claude/agents/visual-critic.md), so it spins up automatically when needed and shuts down when the agent finishes. The first time you run `/iterate` (or `/review`), Claude Code will show a security prompt asking you to approve the embedded server — click approve once and you're done.
+
+Browser cache location: macOS `~/Library/Caches/ms-playwright/`, Linux/WSL `~/.cache/ms-playwright/`, Windows `%USERPROFILE%\AppData\Local\ms-playwright\`.
+
+</details>
 
 ### 4. Launch Claude Code
 From the project folder:
@@ -135,9 +153,9 @@ If you want to change something, the easiest path is **`/refine`** — see the n
 
 ---
 
-## 🔁 When you're not happy with the result: `/refine`
+## 🔁 Changing things after the build
 
-`/refine` takes natural-language feedback and figures out the smallest possible change to address it. **It will not regenerate everything from scratch** — it patches only the parts that need to change, so you don't lose your existing work.
+**If you want to change something**, just run `/refine` with natural-language feedback:
 
 ```
 /refine make the dashboard chart a line chart instead of bars
@@ -145,7 +163,10 @@ If you want to change something, the easiest path is **`/refine`** — see the n
 /refine the whole thing feels too corporate, make it more casual
 ```
 
-It auto-detects the depth of your feedback and runs the minimum needed:
+`/refine` auto-detects whether your change is a small tweak, a single-screen update, or a bigger rethink, and patches only what needs to change — **it never regenerates the whole project from scratch**. If `/refine` picks the wrong depth, just tell it "no, this is bigger" and it re-classifies.
+
+<details>
+<summary>How /refine decides what to update (SURFACE / TARGETED / STRUCTURAL)</summary>
 
 | Depth | What `/refine` does | Examples |
 |--|--|--|
@@ -155,16 +176,44 @@ It auto-detects the depth of your feedback and runs the minimum needed:
 
 **Why this matters**: re-running the full `/discover → /spec → /tasks → /iterate` pipeline for every small change wastes time and risks the AI re-deciding things you already approved. `/refine` keeps the work you already have.
 
-If `/refine` chooses the wrong depth, just tell it: "no, this is a bigger change than that" — it'll re-classify.
+</details>
 
-### When NOT to use `/refine`
-- **Brand new screens that don't fit existing requirements** → use `/discover` to update REQUIREMENTS first, then continue
-- **You want to throw it all away and start over** → delete `docs/REQUIREMENTS.md`, `docs/SPEC.md`, `docs/TASKS.md` and run `/discover` from scratch
-- **A pure conversational tweak that's faster to just ask for** → just talk to Claude Code directly without any command. `/refine` is for when you want the change tracked through the doc/task system.
+<details>
+<summary>When NOT to use /refine</summary>
+
+- **Brand new screens that don't fit existing requirements** → run `/discover` to update REQUIREMENTS first, then continue.
+- **You want to throw it all away and start over** → delete `docs/REQUIREMENTS.md`, `docs/SPEC.md`, `docs/TASKS.md` and run `/discover` from scratch.
+- **A pure conversational tweak** → just talk to Claude Code directly without any command. `/refine` is for when you want the change tracked through the doc/task system.
+
+</details>
 
 ---
 
-## ⚡ Tip: fully hands-off `/iterate`
+## 🛟 Troubleshooting
+
+<details>
+<summary>Common problems and fixes</summary>
+
+| Symptom | Fix |
+|--|--|
+| `command not found: node` / `npm` | Node.js not installed. Get it from <https://nodejs.org/en/download> (LTS) |
+| `command not found: claude` | Claude Code not installed. `curl -fsSL https://claude.ai/install.sh \| bash` (macOS/Linux/WSL) or `irm https://claude.ai/install.ps1 \| iex` (Windows) |
+| `npm install` errors | Confirm `node -v` is `v24+`. Update Node.js if older |
+| `/iterate` says "Playwright MCP not found" | The MCP server is embedded in the visual-critic agent. Check that you approved the security prompt the first time you ran `/iterate`. You can re-trigger it by running `claude mcp reset-project-choices` and then re-running `/iterate` |
+| Linux/WSL `chromium` error (`error while loading shared libraries`) | Run `sudo npx playwright install-deps chromium` |
+| Browser shows nothing | Confirm `npm run dev` is running and the URL (http://127.0.0.1:5173) is correct |
+| Doesn't work on Windows | Use WSL2 (see the Windows section below) |
+
+When in doubt, just tell Claude Code "I got this error: …" — it'll usually walk you through the fix.
+
+</details>
+
+---
+
+## 🧭 Advanced guides
+
+<details>
+<summary>⚡ Fully hands-off mode (<code>claude --dangerously-skip-permissions</code>)</summary>
 
 `/iterate` makes the AI edit files and run `npm` commands autonomously, but by default Claude Code asks for permission on each operation. **If you want to walk away while the loop runs**, launch Claude Code in "skip permissions" mode:
 
@@ -174,25 +223,21 @@ claude --dangerously-skip-permissions
 
 In this mode, no confirmation prompts appear and `/iterate` runs fully hands-off — useful when you want to grab coffee or sleep while the mock builds itself.
 
-### ⚠️ Before you use it
+**⚠️ Before you use it**
 - **It is named "dangerous" for a reason.** You lose the chance to stop a runaway agent.
 - This template's [.claude/settings.json](.claude/settings.json) blocks destructive commands like `rm -rf` and `git push --force`, but other risks remain.
-- **Safe to use when**:
-  - Edits are scoped to `src/` (as in this template) and you have Git history to roll back
-  - You're on your local machine with no external systems exposed
-- **Don't use when**:
-  - You're working in a folder containing important files
-  - You're connected to production or shared infrastructure
-  - You haven't yet seen how the AI behaves (try a few normal-mode runs first)
+- **Safe to use when**: edits are scoped to `src/`, you're on your local machine, and you have Git history to roll back.
+- **Don't use when**: you're working in a folder containing important files, connected to production, or you haven't yet seen how the AI behaves.
 
-### Tips for safe use
-1. Run `/iterate` in normal mode the first few times to observe the AI's behavior
-2. Once you're comfortable and committing to Git regularly, try `--dangerously-skip-permissions`
-3. You can always hit `Ctrl+C` to stop the loop at any time
+**Tips for safe use**
+1. Run `/iterate` in normal mode the first few times to observe the AI's behavior.
+2. Once you're comfortable and committing to Git regularly, try `--dangerously-skip-permissions`.
+3. You can always hit `Ctrl+C` to stop the loop at any time.
 
----
+</details>
 
-## 🪟 For Windows users
+<details>
+<summary>🪟 Windows / WSL2 setup</summary>
 
 We strongly recommend running inside **WSL2** (Windows Subsystem for Linux 2). Claude Code and Playwright MCP are most stable there, and the hook scripts behave identically to macOS/Linux.
 
@@ -209,12 +254,12 @@ node -v   # → v24.x.x
 ```
 From there, follow the Quick Start above.
 
----
+</details>
 
-## 🔄 How the self-improvement loop works
+<details>
+<summary>🔄 How the self-improvement loop works (diagrams)</summary>
 
-### Overall flow
-The human only reviews at the three ✋ points. Everything after `/iterate` runs hands-off.
+**Overall flow** — the human only reviews at the three ✋ points. Everything after `/iterate` runs hands-off.
 
 ```mermaid
 flowchart TD
@@ -238,7 +283,8 @@ flowchart TD
     style R3 fill:#b91c1c,stroke:#7f1d1d,stroke-width:2px,color:#ffffff
 ```
 
-### Inside `/iterate`
+**Inside `/iterate`**:
+
 ```mermaid
 flowchart TD
     Start([next task]) --> Builder[🛠 builder agent<br/>writes code]
@@ -266,16 +312,12 @@ flowchart TD
 
 After 3 consecutive failures on the same task, the loop escalates to the human.
 
-### Why split builder and fixer?
-The fixer exists to give a fresh-context agent the job of diagnosing gaps from the visual-critic, instead of asking the builder to defend its own implementation. For client-facing proposal mocks where quality matters, this:
-- Removes sunk-cost bias from the diagnosis
-- Keeps the per-task retry counter clean
-- Lets the fixer make minimal, targeted patches
-- **Refuses to patch structurally wrong implementations** — the fixer escalates `[STRUCTURAL]` gaps back to the builder for a proper rebuild instead of layering tape over a broken approach
+**Why split builder and fixer?** The fixer exists to give a fresh-context agent the job of diagnosing gaps from the visual-critic, instead of asking the builder to defend its own implementation. For client-facing proposal mocks where quality matters, this removes sunk-cost bias from diagnosis, keeps the per-task retry counter clean, lets the fixer make minimal patches, and **refuses to patch structurally wrong implementations** — the fixer escalates `[STRUCTURAL]` gaps back to the builder for a proper rebuild instead of layering tape over a broken approach.
 
----
+</details>
 
-## 📁 Directory layout
+<details>
+<summary>📁 Directory layout</summary>
 
 ```
 .
@@ -296,31 +338,16 @@ The fixer exists to give a fresh-context agent the job of diagnosing gaps from t
 │   └── lib/utils.ts         # cn() and other tiny helpers
 └── .claude/
     ├── settings.json        # hooks / permissions
-    ├── commands/            # /discover /spec /tasks /iterate /review
+    ├── commands/            # /discover /spec /tasks /iterate /refine /review
     ├── agents/              # builder / visual-critic / fixer / planner
     ├── hooks/               # cross-platform Node hooks
     └── skills/              # on-demand pattern references
 ```
 
----
+</details>
 
-## ❓ Troubleshooting
-
-| Symptom | Fix |
-|--|--|
-| `command not found: node` / `npm` | Node.js not installed. Get it from <https://nodejs.org/en/download> (LTS) |
-| `command not found: claude` | Claude Code not installed. `curl -fsSL https://claude.ai/install.sh \| bash` (macOS/Linux/WSL) or `irm https://claude.ai/install.ps1 \| iex` (Windows) |
-| `npm install` errors | Confirm `node -v` is `v24+`. Update Node.js if older |
-| `/iterate` says "Playwright MCP not found" | The MCP server is embedded in the visual-critic agent. Check that you approved the security prompt the first time you ran `/iterate`. You can re-trigger it by running `claude mcp reset-project-choices` and then re-running `/iterate` |
-| Linux/WSL `chromium` error (`error while loading shared libraries`) | Run `sudo npx playwright install-deps chromium` |
-| Browser shows nothing | Confirm `npm run dev` is running and the URL (http://127.0.0.1:5173) is correct |
-| Doesn't work on Windows | Use WSL2 (see the Windows section above) |
-
-When in doubt, just tell Claude Code "I got this error: …" — it'll usually walk you through the fix.
-
----
-
-## 🛠 npm scripts
+<details>
+<summary>🛠 npm scripts</summary>
 
 | Script | What it does |
 |--|--|
@@ -330,15 +357,15 @@ When in doubt, just tell Claude Code "I got this error: …" — it'll usually w
 | `npm run lint` | ESLint |
 | `npm run test` | Vitest |
 
+</details>
+
 ---
 
-## 🤝 References
+## 🤝 References & License
+
 - [shanraisshan/claude-code-best-practice](https://github.com/shanraisshan/claude-code-best-practice)
 - [affaan-m/everything-claude-code](https://github.com/affaan-m/everything-claude-code)
 - [github/spec-kit](https://github.com/github/spec-kit)
 - [Playwright MCP](https://github.com/microsoft/playwright-mcp)
 
----
-
-## 📄 License
-MIT
+MIT License.
