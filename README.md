@@ -108,7 +108,7 @@ Inside the Claude Code session, just run these slash commands in order:
 /discover    # 1. AI interviews you → REQUIREMENTS doc
 /spec        # 2. AI converts requirements → SPEC
 /tasks       # 3. AI breaks SPEC into implementation tasks
-/iterate        # 4. AI builds → reviews → fixes autonomously (hands-off)
+/iterate     # 4. AI builds → reviews → fixes autonomously (hands-off)
 ```
 Between each step, Claude asks "ready to proceed?" — read the doc and approve if it looks right.
 
@@ -119,6 +119,19 @@ npm run dev
 Visit the URL it prints (usually http://127.0.0.1:5173) in your browser to see the finished mock.
 
 If you want to change something, the easiest path is **`/refine`** — see the next section.
+
+---
+
+## 📋 All commands
+
+| Command | Phase | What it does |
+|--|--|--|
+| `/discover` | Initial | Interactive interview that turns a vague idea into `docs/REQUIREMENTS.md`. Re-run it to refine the requirements (it reads the existing file and only asks about changes). |
+| `/spec` | Initial | Converts `REQUIREMENTS.md` into a concrete `docs/SPEC.md` with per-screen sections. |
+| `/tasks` | Initial | Breaks `SPEC.md` into implementation units in `docs/TASKS.md`. |
+| `/iterate` | Initial | Autonomously executes `TASKS.md`: builder → visual-critic → fixer loop until all tasks pass or budget runs out. This is the hands-off build phase. |
+| `/refine <feedback>` | After build | Natural-language feedback to change the built mock. Auto-detects whether to patch code only (SURFACE), update one task (TARGETED), or propagate from requirements (STRUCTURAL). Never regenerates from scratch — see the section below. |
+| `/review` | Ad-hoc | Runs the visual-critic once against the current state, without fixing anything. Useful right after a manual edit or when you want a second opinion on the mock without triggering the full loop. Reports gaps in the same tagged format as `/iterate` but stops at the report. |
 
 ---
 
