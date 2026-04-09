@@ -1,207 +1,205 @@
 # claude-code-mock-starter
 
-> Claude Code で最速にブラウザで動くUIモックを作るためのGitHub Template
-> A GitHub Template for building browser-runnable UI mocks at maximum speed with Claude Code.
+> A GitHub Template for building browser-runnable UI mocks at maximum speed with [Claude Code](https://docs.claude.com/en/docs/claude-code/overview).
 
-人間は **「こんなものが欲しい」と話すこと** と **最終レビュー** だけ。残り（要件整理・設計・実装・視覚検証・修正）はClaude Codeが自走します。
-**プログラミングの知識がなくても大丈夫** — AIが対話で要件をまとめ、コードを書き、ブラウザで自分で確認して直してくれます。
+**🌐 Language**: English | [日本語](README.ja.md)
 
 The human only describes what they want and reviews the result. Claude Code handles the rest — requirements clarification, design, implementation, visual verification, and self-correction. **No coding experience required.**
 
 ---
 
-## ✨ 特徴 / Features
+## ✨ Features
 
-- **対話的な要件定義** — `/discover` コマンドがインタビュー形式であいまいな要望を実装可能な仕様に落とし込みます。
-- **Spec-Driven Workflow** — `REQUIREMENTS → SPEC → TASKS → 実装` の各段階で人間がレビュー可能。
-- **視覚的な自己改善ループ** — Playwright MCP でスクリーンショットを撮り、AI自身が要件と照合・修正します。
-- **強制品質ゲート** — ファイル編集ごとに `tsc` と `eslint` がhookで自動実行され、失敗するとAIが自己修正します。
-- **クロスプラットフォーム** — macOS / Linux / Windows (WSL2推奨)。
-- **固定スタック** — 再現性のため Vite + React + TypeScript + Tailwind + shadcn/ui + MSW + React Router で固定。
+- **Interactive requirements gathering** — the `/discover` command interviews you to turn vague ideas into an implementable spec.
+- **Spec-driven workflow** — `REQUIREMENTS → SPEC → TASKS → implementation`, with a human review gate at each step.
+- **Visual self-improvement loop** — Playwright MCP screenshots the running mock, AI verifies against the spec, fixes its own gaps.
+- **Enforced quality gates** — every file edit triggers a hook that runs `tsc` and `eslint`. Failures force the AI to self-correct.
+- **Cross-platform** — macOS / Linux / Windows (WSL2 recommended).
+- **Fixed stack for reproducibility** — Vite + React + TypeScript + Tailwind + shadcn/ui + MSW + React Router. No bikeshedding.
+- **Quality bar tuned for client-facing proposals** — the visual-critic tags gaps by category (`[VISUAL] [DATA] [INTERACTION] [STRUCTURAL]`) and the fixer escalates structural mismatches back to the builder for proper rebuild instead of taping over them.
 
 ---
 
-## 🚀 クイックスタート / Quick Start
+## 🚀 Quick Start
 
-### 0. 事前準備 / Prerequisites
-非エンジニアの方も以下2つを入れれば動かせます。
+### 0. Prerequisites
+You only need two things, even as a non-developer.
 
-#### 必須 / Required
+#### Required
 
-| 必要なもの | インストール方法 / Install |
+| Tool | Install |
 |--|--|
-| **Claude Code** (ネイティブ版) | macOS / Linux / WSL: `curl -fsSL https://claude.ai/install.sh \| bash`<br>Windows (PowerShell): `irm https://claude.ai/install.ps1 \| iex`<br>Homebrew: `brew install --cask claude-code`<br>公式手順: <https://docs.claude.com/ja/docs/claude-code/quickstart> |
-| **Node.js 24 以上** | 公式インストーラー: <https://nodejs.org/ja/download>（最新 LTS を選択）<br>※ このテンプレートが React/Vite を使うため必要です |
+| **Claude Code** (native) | macOS / Linux / WSL: `curl -fsSL https://claude.ai/install.sh \| bash`<br>Windows (PowerShell): `irm https://claude.ai/install.ps1 \| iex`<br>Homebrew: `brew install --cask claude-code`<br>Official docs: <https://docs.claude.com/en/docs/claude-code/quickstart> |
+| **Node.js 24+** | Official installer: <https://nodejs.org/en/download> (pick latest LTS)<br>Required because the template uses React/Vite. |
 
-> 💡 以前は Claude Code 自体も Node.js 経由でインストールしていましたが、現在は **ネイティブ版**が公式の推奨方法です。Node.js は React アプリのビルドにのみ必要になります。
+> 💡 Claude Code itself used to require Node.js, but the **native installer** is now the official recommended path. Node.js is only needed for the React app build.
 
-#### 任意 / Optional
+#### Optional
 
-| あると便利 | 用途 |
+| Nice to have | Use case |
 |--|--|
-| **Git** (<https://git-scm.com/downloads>) | バージョン管理したい場合のみ。後述の「ZIP ダウンロード」で進めるならなくてもOK |
+| **Git** (<https://git-scm.com/downloads>) | Only if you want version control. The "Download ZIP" path below works without Git. |
 
-インストール後、ターミナル（macOS は「ターミナル」アプリ、Windows は「PowerShell」または WSL2 のシェル）で次を実行して確認:
+After installing, verify in a terminal (macOS Terminal app, Windows PowerShell, or WSL2 shell):
 ```bash
 claude --version
-node -v       # → v24.0.0 以上が出ればOK
+node -v       # → v24.0.0 or higher
 ```
 
-### 1. テンプレートを取得 / Get the template
-3つの方法から好きなものを選んでください。
+### 1. Get the template
+Pick whichever fits you.
 
-**方法A（最も簡単・Git不要）**: ZIP をダウンロード
-1. <https://github.com/nukacha/claude-code-mock-starter> を開く
-2. 緑色の "**Code**" ボタン → "**Download ZIP**" をクリック
-3. ダウンロードしたZIPを好きな場所に展開
-4. ターミナルで展開したフォルダに移動: `cd path/to/claude-code-mock-starter-main`
+**Option A (easiest, no Git needed)**: Download ZIP
+1. Open <https://github.com/nukacha/claude-code-mock-starter>
+2. Click the green "**Code**" button → "**Download ZIP**"
+3. Unzip wherever you like
+4. `cd path/to/claude-code-mock-starter-main` in your terminal
 
-**方法B（おすすめ・自分のリポジトリとして管理したい人向け）**: Use this template (要 GitHub アカウント)
-1. <https://github.com/nukacha/claude-code-mock-starter> を開く
-2. 緑色の "**Use this template**" → "Create a new repository" → リポジトリ名を入力して作成
-3. 作ったリポジトリを自分のPCに取得（Git が必要）:
+**Option B (recommended for managing as your own repo)**: Use this template (requires GitHub account)
+1. Open <https://github.com/nukacha/claude-code-mock-starter>
+2. Click "**Use this template**" → "Create a new repository" → name it
+3. Clone your new repo (requires Git):
    ```bash
-   git clone https://github.com/<あなたのGitHubユーザー名>/<新しいリポジトリ名>.git
-   cd <新しいリポジトリ名>
+   git clone https://github.com/<your-username>/<your-repo>.git
+   cd <your-repo>
    ```
 
-**方法C（コマンド一発）**: degit (要 Node.js、Git不要)
+**Option C (one command)**: degit (requires Node.js, no Git)
 ```bash
 npx degit nukacha/claude-code-mock-starter my-mock
 cd my-mock
 ```
 
-### 2. 依存関係のインストール / Install dependencies
-プロジェクトのフォルダに入った状態で:
+### 2. Install dependencies
+Inside the project folder:
 ```bash
 npm install
 npm run msw:init
 ```
-初回は数分かかります。エラーが出た場合は Node.js のバージョン (`node -v`) が 24 以上か確認してください。
+First install takes a few minutes. If you hit errors, double-check `node -v` is 24+.
 
-### 3. Playwright MCP のセットアップ（必須） / Set up Playwright MCP (required)
-AIが「ブラウザでスクリーンショットを撮って自分で確認する」ための仕組みです。視覚的自己改善ループの中核なので必須。
+### 3. Set up Playwright MCP (required)
+This is how the AI screenshots its own work and verifies it visually. It's the heart of the self-improvement loop, so don't skip it.
 
-#### 3-1. ブラウザ（Chromium）をインストール
-Playwright は実際のブラウザを動かすため、最初に Chromium をダウンロードします。
+#### 3-1. Install the browser (Chromium)
+Playwright drives a real browser, so download Chromium first:
 ```bash
 npx -y playwright@latest install chromium
 ```
-初回は数百MBのダウンロードがあるので数分かかります。
+First run downloads a few hundred MB; expect a few minutes.
 
-**Linux / WSL2 ユーザーは追加で**（システムライブラリが必要なため）:
+**Linux / WSL2 users also need system libraries**:
 ```bash
 sudo npx -y playwright@latest install-deps chromium
 ```
-パスワードを聞かれたら PC のログインパスワードを入力してください。macOS / Windows ネイティブでは不要です。
+Enter your machine login password if prompted. Not needed on macOS / native Windows.
 
-#### 3-2. Claude Code に Playwright MCP を登録
+#### 3-2. Register Playwright MCP with Claude Code
 ```bash
 claude mcp add playwright npx @playwright/mcp@latest -- --headless
 ```
-※ `--headless` を付けることで「画面を表示せず裏でブラウザを動かす」モードになります。WSL2 や画面なしのサーバーでも安定して動かすために推奨です。画面付きで動作を見たい場合は `--headless` を外してください。
+The `--headless` flag runs the browser invisibly in the background — recommended for stable operation on WSL2 and headless servers. Drop the flag if you want to watch the browser as it runs.
 
-#### 3-3. インストール確認
-新しいターミナルで `claude` を起動し、対話画面で次を実行:
+#### 3-3. Verify
+Open a fresh terminal, launch Claude Code, and inside the session run:
 ```
 /mcp
 ```
-一覧に `playwright` が `connected` として表示されればOKです。
-表示されない場合はターミナルを開き直してから再度試してください。
+You should see `playwright` listed as `connected`. If not, restart the terminal and try again.
 
-#### 💡 補足
-- 1回設定すれば保存されるので、次回以降このステップは不要です。
-- ブラウザのダウンロード先: macOS は `~/Library/Caches/ms-playwright/`、Linux/WSL は `~/.cache/ms-playwright/`、Windows は `%USERPROFILE%\AppData\Local\ms-playwright\`
+#### 💡 Notes
+- This is a one-time setup. You don't redo it next session.
+- Browser cache location: macOS `~/Library/Caches/ms-playwright/`, Linux/WSL `~/.cache/ms-playwright/`, Windows `%USERPROFILE%\AppData\Local\ms-playwright\`
 
-### 4. Claude Code を起動 / Launch Claude Code
-プロジェクトのフォルダで:
+### 4. Launch Claude Code
+From the project folder:
 ```bash
 claude
 ```
-ターミナル内に対話画面が立ち上がります。
+The interactive session opens in your terminal.
 
-### 5. 4ステップでモック完成 / Build a mock in 4 steps
-Claude Code の対話画面で、以下を順番に入力します。`/` で始まるコマンドを打つだけ。
+### 5. Build a mock in 4 steps
+Inside the Claude Code session, just run these slash commands in order:
 ```
-/discover    # 1. AIが質問してくるので答えるだけ → 要件定義書ができる
-/spec        # 2. AIが要件を仕様書に変換
-/tasks       # 3. AIが仕様書を実装タスクに分解
-/loop        # 4. AIが自分で実装→確認→修正を繰り返す（手放しでOK）
+/discover    # 1. AI interviews you → REQUIREMENTS doc
+/spec        # 2. AI converts requirements → SPEC
+/tasks       # 3. AI breaks SPEC into implementation tasks
+/loop        # 4. AI builds → reviews → fixes autonomously (hands-off)
 ```
-それぞれの間に「この内容で進めて良いですか？」と確認されます。中身を読んで問題なければ次へ進めてください。
+Between each step, Claude asks "ready to proceed?" — read the doc and approve if it looks right.
 
-ループ完了後、別のターミナルウィンドウで以下を実行するとブラウザで完成したモックを確認できます:
+After the loop finishes, open a separate terminal and run:
 ```bash
 npm run dev
 ```
-表示されたURL（通常は http://127.0.0.1:5173 ）をブラウザで開いてください。
+Visit the URL it prints (usually http://127.0.0.1:5173) in your browser to see the finished mock.
 
-修正したい点があれば、Claude Code の画面で `/discover` を再実行するか、要望を直接話しかければOKです。
+If you want to change something, just rerun `/discover` or talk to Claude Code directly about what needs adjusting.
 
 ---
 
-## ⚡ 補足: `/loop` を完全に手放しで動かしたい場合 / Tip: fully hands-off `/loop`
+## ⚡ Tip: fully hands-off `/loop`
 
-`/loop` は AI が自動でファイル編集や `npm` コマンドを実行しますが、デフォルトでは操作のたびに「このコマンドを実行してよいですか？」と確認を求められます。**席を離れている間にAIが止まってしまうのが嫌な場合**は、Claude Code を「権限スキップモード」で起動できます。
+`/loop` makes the AI edit files and run `npm` commands autonomously, but by default Claude Code asks for permission on each operation. **If you want to walk away while the loop runs**, launch Claude Code in "skip permissions" mode:
 
 ```bash
 claude --dangerously-skip-permissions
 ```
 
-このモードで起動すると、確認プロンプトが出ずに `/loop` が完全に手放しで進みます。コーヒーを淹れている間や寝ている間にモックを完成させたい時に便利です。
+In this mode, no confirmation prompts appear and `/loop` runs fully hands-off — useful when you want to grab coffee or sleep while the mock builds itself.
 
-### ⚠️ 使う前に知っておくこと
-- **名前の通り「危険」なオプション**です。AIが暴走した場合に止める機会がなくなります。
-- このテンプレートでは [.claude/settings.json](.claude/settings.json) で `rm -rf` や `git push --force` などの破壊的コマンドを禁止していますが、それ以外のリスクは残ります。
-- **使ってよい場面**:
-  - このテンプレートのように、ファイル変更が `src/` 以下に限定されていて、Git でいつでも巻き戻せる状況
-  - 手元のマシンで動かしていて、外部システムへの影響がない時
-- **使うべきでない場面**:
-  - 大事なファイルがあるフォルダで作業している時
-  - 本番環境や共有サーバーに繋がっている時
-  - 何が起きてるか確認したい時（最初の数回は通常モードで動かして挙動を理解してから）
+### ⚠️ Before you use it
+- **It is named "dangerous" for a reason.** You lose the chance to stop a runaway agent.
+- This template's [.claude/settings.json](.claude/settings.json) blocks destructive commands like `rm -rf` and `git push --force`, but other risks remain.
+- **Safe to use when**:
+  - Edits are scoped to `src/` (as in this template) and you have Git history to roll back
+  - You're on your local machine with no external systems exposed
+- **Don't use when**:
+  - You're working in a folder containing important files
+  - You're connected to production or shared infrastructure
+  - You haven't yet seen how the AI behaves (try a few normal-mode runs first)
 
-### 安全に使うコツ
-1. 最初の数回は **通常モード** で `/loop` を回して、AIがどんな動きをするか観察する
-2. 慣れてきて、結果を Git でこまめにコミットしている状態なら `--dangerously-skip-permissions` を試す
-3. 何かおかしいと感じたら `Ctrl+C` でいつでも止められます
+### Tips for safe use
+1. Run `/loop` in normal mode the first few times to observe the AI's behavior
+2. Once you're comfortable and committing to Git regularly, try `--dangerously-skip-permissions`
+3. You can always hit `Ctrl+C` to stop the loop at any time
 
 ---
 
-## 🪟 Windows ユーザーへ / For Windows users
+## 🪟 For Windows users
 
-WSL2（Windows Subsystem for Linux 2）の上で動かすことを強くおすすめします。Claude Code と Playwright MCP の動作が安定し、トラブルが少ないためです。
+We strongly recommend running inside **WSL2** (Windows Subsystem for Linux 2). Claude Code and Playwright MCP are most stable there, and the hook scripts behave identically to macOS/Linux.
 
-**WSL2 のセットアップ**: <https://learn.microsoft.com/ja-jp/windows/wsl/install>
+**WSL2 setup**: <https://learn.microsoft.com/en-us/windows/wsl/install>
 
-WSL2 を入れた後、Ubuntu のターミナルで:
+Inside an Ubuntu shell on WSL2:
 ```bash
-# Node.js 24 をインストール（nvm 経由がおすすめ）
+# Install Node.js 24 (nvm recommended)
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
-# 一度ターミナルを開き直してから:
+# Reopen the terminal, then:
 nvm install 24
 nvm use 24
-node -v   # → v24.x.x が出ればOK
+node -v   # → v24.x.x
 ```
-以降は上記クイックスタートと同じ手順です。
+From there, follow the Quick Start above.
 
 ---
 
-## 🔄 自己改善ループの仕組み / How the self-improvement loop works
+## 🔄 How the self-improvement loop works
 
-### 全体フロー / Overall flow
-人間がレビューするのは ✋ の3箇所だけ。それ以降の `/loop` は手放しで動きます。
+### Overall flow
+The human only reviews at the three ✋ points. Everything after `/loop` runs hands-off.
 
 ```mermaid
 flowchart TD
-    A([👤 あいまいな要望<br/>Vague idea]) --> B[/discover<br/>対話で要件定義/]
-    B --> R1{✋ 人間レビュー}
-    R1 --> C[/spec<br/>実装可能な仕様へ/]
-    C --> R2{✋ 人間レビュー}
-    R2 --> D[/tasks<br/>小さな実装単位へ分解/]
-    D --> R3{✋ 人間レビュー}
-    R3 --> E[/loop<br/>以降ハンズオフ 🤖/]
-    E --> F([🎉 完成したモック])
+    A([👤 Vague idea]) --> B[/discover<br/>interactive requirements/]
+    B --> R1{✋ human review}
+    R1 --> C[/spec<br/>turn into implementable spec/]
+    C --> R2{✋ human review}
+    R2 --> D[/tasks<br/>break into small units/]
+    D --> R3{✋ human review}
+    R3 --> E[/loop<br/>hands-off from here 🤖/]
+    E --> F([🎉 finished mock])
 
     style A fill:#b45309,stroke:#78350f,stroke-width:2px,color:#ffffff
     style B fill:#1e3a8a,stroke:#0f172a,stroke-width:2px,color:#ffffff
@@ -214,20 +212,20 @@ flowchart TD
     style R3 fill:#b91c1c,stroke:#7f1d1d,stroke-width:2px,color:#ffffff
 ```
 
-### `/loop` の中で起きていること / Inside the loop
+### Inside `/loop`
 ```mermaid
 flowchart TD
-    Start([次のタスク<br/>Next task]) --> Builder[🛠 builder agent<br/>コードを書く]
+    Start([next task]) --> Builder[🛠 builder agent<br/>writes code]
     Builder --> Hook{post-edit hook<br/>typecheck + lint}
     Hook -->|fail| Builder
-    Hook -->|pass| Critic[👀 visual-critic agent<br/>Playwright で<br/>スクリーンショット検証<br/>＋ gap をタグ付け]
-    Critic --> Verdict{判定}
-    Verdict -->|PASS ✅| Next([次のタスクへ])
-    Verdict -->|FAIL ❌| Fixer[🔧 fixer agent<br/>差分を診断]
-    Fixer -->|VISUAL/DATA/<br/>INTERACTION| Patch[最小修正でパッチ]
+    Hook -->|pass| Critic[👀 visual-critic agent<br/>Playwright screenshots<br/>+ tags every gap]
+    Critic --> Verdict{verdict}
+    Verdict -->|PASS ✅| Next([next task])
+    Verdict -->|FAIL ❌| Fixer[🔧 fixer agent<br/>diagnoses gaps]
+    Fixer -->|VISUAL/DATA/<br/>INTERACTION| Patch[minimal patch]
     Patch --> Hook
     Fixer -->|STRUCTURAL ⚠️| Builder
-    Verdict -->|3回連続 FAIL| Escalate([🚨 人間に<br/>エスカレーション])
+    Verdict -->|3 consecutive FAILs| Escalate([🚨 escalate<br/>to human])
 
     style Start fill:#1d4ed8,stroke:#0f172a,stroke-width:2px,color:#ffffff
     style Next fill:#047857,stroke:#064e3b,stroke-width:2px,color:#ffffff
@@ -240,57 +238,64 @@ flowchart TD
     style Verdict fill:#374151,stroke:#0f172a,stroke-width:2px,color:#ffffff
 ```
 
-3回連続で FAIL すると人間にエスカレーションします。
 After 3 consecutive failures on the same task, the loop escalates to the human.
+
+### Why split builder and fixer?
+The fixer exists to give a fresh-context agent the job of diagnosing gaps from the visual-critic, instead of asking the builder to defend its own implementation. For client-facing proposal mocks where quality matters, this:
+- Removes sunk-cost bias from the diagnosis
+- Keeps the per-task retry counter clean
+- Lets the fixer make minimal, targeted patches
+- **Refuses to patch structurally wrong implementations** — the fixer escalates `[STRUCTURAL]` gaps back to the builder for a proper rebuild instead of layering tape over a broken approach
 
 ---
 
-## 📁 ディレクトリ構成 / Directory layout
+## 📁 Directory layout
 
 ```
 .
-├── CLAUDE.md                # Claude Code 全体ルール
-├── README.md                # このファイル
+├── CLAUDE.md                # project-wide rules for Claude Code
+├── README.md                # this file
+├── README.ja.md             # Japanese version
 ├── docs/
 │   ├── REQUIREMENTS.template.md
 │   ├── SPEC.template.md
 │   └── TASKS.template.md
 ├── src/
-│   ├── App.tsx              # ルーティング
-│   ├── main.tsx             # MSW起動含むエントリ
-│   ├── pages/               # 1ファイル = 1画面
-│   ├── components/ui/       # shadcn/ui スタイルの基本部品
-│   ├── components/          # 自作コンポーネント
-│   ├── mocks/handlers.ts    # MSWハンドラ (全API)
-│   └── lib/utils.ts         # cn() などの小さなユーティリティ
+│   ├── App.tsx              # router
+│   ├── main.tsx             # entry, boots MSW
+│   ├── pages/               # one file per route
+│   ├── components/ui/       # shadcn/ui-style primitives
+│   ├── components/          # composite components
+│   ├── mocks/handlers.ts    # MSW handlers (all APIs)
+│   └── lib/utils.ts         # cn() and other tiny helpers
 └── .claude/
-    ├── settings.json        # hooks / 権限設定
+    ├── settings.json        # hooks / permissions
     ├── commands/            # /discover /spec /tasks /loop /review
     ├── agents/              # builder / visual-critic / fixer / planner
     ├── hooks/               # cross-platform Node hooks
-    └── skills/              # on-demand パターン集
+    └── skills/              # on-demand pattern references
 ```
 
 ---
 
-## ❓ よくあるトラブル / Troubleshooting
+## ❓ Troubleshooting
 
-| 症状 | 対処 |
+| Symptom | Fix |
 |--|--|
-| `command not found: node` / `npm` | Node.js が入っていません。<https://nodejs.org/ja/download> から LTS 版をインストール |
-| `command not found: claude` | Claude Code が未インストール。`curl -fsSL https://claude.ai/install.sh \| bash`（macOS/Linux/WSL）または `irm https://claude.ai/install.ps1 \| iex`（Windows） |
-| `npm install` でエラー | `node -v` が `v24` 以上か確認。古ければ Node.js を更新 |
-| `/loop` で「Playwright MCP が見つからない」 | 手順3を実行したか確認。Claude Code 内で `/mcp` と入力して `playwright` が `connected` か確認 |
-| Linux/WSL で `chromium` 起動エラー (`error while loading shared libraries`) | `sudo npx playwright install-deps chromium` を実行してシステムライブラリを入れる |
-| WSL でブラウザが画面に出ない / 固まる | 手順3-2 の `--headless` フラグが付いているか確認 |
-| ブラウザに何も表示されない | ターミナルで `npm run dev` が動いているか、URL (http://127.0.0.1:5173) が正しいか確認 |
-| Windows でうまく動かない | WSL2 上で実行することを強く推奨（上記セクション参照） |
+| `command not found: node` / `npm` | Node.js not installed. Get it from <https://nodejs.org/en/download> (LTS) |
+| `command not found: claude` | Claude Code not installed. `curl -fsSL https://claude.ai/install.sh \| bash` (macOS/Linux/WSL) or `irm https://claude.ai/install.ps1 \| iex` (Windows) |
+| `npm install` errors | Confirm `node -v` is `v24+`. Update Node.js if older |
+| `/loop` says "Playwright MCP not found" | Re-check step 3. Inside Claude Code run `/mcp` and confirm `playwright` is `connected` |
+| Linux/WSL `chromium` error (`error while loading shared libraries`) | Run `sudo npx playwright install-deps chromium` |
+| WSL browser hangs / never appears | Make sure `--headless` is set in step 3-2 |
+| Browser shows nothing | Confirm `npm run dev` is running and the URL (http://127.0.0.1:5173) is correct |
+| Doesn't work on Windows | Use WSL2 (see the Windows section above) |
 
-困ったら Claude Code に「○○というエラーが出た」と話しかければ、ほとんどの場合解決方法を教えてくれます。
+When in doubt, just tell Claude Code "I got this error: …" — it'll usually walk you through the fix.
 
 ---
 
-## 🛠 利用可能なnpmスクリプト / Scripts
+## 🛠 npm scripts
 
 | Script | What it does |
 |--|--|
@@ -302,7 +307,7 @@ After 3 consecutive failures on the same task, the loop escalates to the human.
 
 ---
 
-## 🤝 参考 / References
+## 🤝 References
 - [shanraisshan/claude-code-best-practice](https://github.com/shanraisshan/claude-code-best-practice)
 - [affaan-m/everything-claude-code](https://github.com/affaan-m/everything-claude-code)
 - [github/spec-kit](https://github.com/github/spec-kit)
