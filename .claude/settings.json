@@ -3,22 +3,22 @@
   "permissions": {
     "allow": [
       "Bash(npm install)",
-      "Bash(npm run dev:*)",
-      "Bash(npm run build:*)",
-      "Bash(npm run lint:*)",
-      "Bash(npm run typecheck:*)",
-      "Bash(npm run test:*)",
+      "Bash(npm run dev *)",
+      "Bash(npm run build *)",
+      "Bash(npm run lint *)",
+      "Bash(npm run typecheck *)",
+      "Bash(npm run test *)",
       "Bash(node *)",
-      "Read(*)",
-      "Write(*)",
-      "Edit(*)",
-      "Glob(*)",
-      "Grep(*)"
+      "Read",
+      "Write",
+      "Edit",
+      "Glob",
+      "Grep"
     ],
     "deny": [
       "Bash(rm -rf *)",
-      "Bash(git push --force*)",
-      "Bash(git reset --hard*)"
+      "Bash(git push --force *)",
+      "Bash(git reset --hard *)"
     ]
   },
   "hooks": {
