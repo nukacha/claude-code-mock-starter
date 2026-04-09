@@ -27,17 +27,33 @@ You are the **visual-critic** subagent. You judge whether the running mock satis
    - Any ❌ or console error → `FAIL: <bullet list of specific gaps>`
 
 ## Output format
+
+Structure each gap with a **category tag** so the downstream agent can decide whether to patch or rebuild:
+
+| Tag | Meaning | Examples |
+|--|--|--|
+| `[VISUAL]` | Surface-level UI mismatch fixable by editing JSX/Tailwind classes | wrong spacing, missing icon, color off, label typo, button in wrong corner |
+| `[DATA]` | Wrong data shown — MSW handler shape, count, or content is off | empty list when 3 expected, wrong field name, hardcoded value not matching SPEC |
+| `[INTERACTION]` | Click/navigation/state change does not behave as specified | button does nothing, wrong route on click, form does not validate |
+| `[STRUCTURAL]` | The implementation approach itself does not match SPEC — needs redesign, not patching | SPEC says table but page renders cards; SPEC says modal but page renders inline; component hierarchy is fundamentally wrong |
+
 ```
 ROUTE /dashboard
 - ✅ "Header shows user name" — snapshot has heading "Hello, Alice"
-- ❌ "Card list shows 3 items" — only 1 item rendered, MSW handler may be returning empty array
+- ❌ "Card list shows 3 items" — only 1 item rendered
+- ❌ "Edit button on each card" — no edit button found anywhere on page
 - console errors: 0
+
 VERDICT: FAIL
+
 GAPS:
-  - Card list count mismatch on /dashboard — check src/mocks/handlers.ts
+  - [DATA] Card list count mismatch — only 1 of 3 expected items rendered. MSW handler likely returns wrong array length. Check src/mocks/handlers.ts.
+  - [STRUCTURAL] SPEC §2 specifies a sortable data table with column headers, but the page renders a card grid. The whole layout component needs to be rebuilt as <table>, not patched.
 ```
 
 ## Rules
-- Be specific. "Looks wrong" is not useful. Cite the actual snapshot/screenshot evidence.
-- Don't suggest code fixes — that's the fixer's job. Just report what you saw and which criterion it violates.
+- **Tag every gap.** Without a tag, the fixer can't decide whether to patch or escalate.
+- **Be specific.** "Looks wrong" is not useful. Cite the actual snapshot/screenshot evidence.
+- **Don't suggest code fixes** beyond pointing at the suspect file. Diagnosis, not prescription.
+- **STRUCTURAL is for genuine redesigns**, not for "this needs more than 5 lines of changes". If a small refactor closes the gap, it's still `[VISUAL]` or `[DATA]`. Use `[STRUCTURAL]` only when the current approach can't get there from here.
 - If a criterion is ambiguous or unverifiable from a screenshot, mark it `?` and explain — don't guess.

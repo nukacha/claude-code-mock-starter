@@ -220,11 +220,13 @@ flowchart TD
     Start([次のタスク<br/>Next task]) --> Builder[🛠 builder agent<br/>コードを書く]
     Builder --> Hook{post-edit hook<br/>typecheck + lint}
     Hook -->|fail| Builder
-    Hook -->|pass| Critic[👀 visual-critic agent<br/>Playwright で<br/>スクリーンショット検証]
+    Hook -->|pass| Critic[👀 visual-critic agent<br/>Playwright で<br/>スクリーンショット検証<br/>＋ gap をタグ付け]
     Critic --> Verdict{判定}
     Verdict -->|PASS ✅| Next([次のタスクへ])
-    Verdict -->|FAIL ❌| Fixer[🔧 fixer agent<br/>指摘を修正]
-    Fixer --> Hook
+    Verdict -->|FAIL ❌| Fixer[🔧 fixer agent<br/>差分を診断]
+    Fixer -->|VISUAL/DATA/<br/>INTERACTION| Patch[最小修正でパッチ]
+    Patch --> Hook
+    Fixer -->|STRUCTURAL ⚠️| Builder
     Verdict -->|3回連続 FAIL| Escalate([🚨 人間に<br/>エスカレーション])
 
     style Start fill:#1d4ed8,stroke:#0f172a,stroke-width:2px,color:#ffffff
@@ -233,6 +235,7 @@ flowchart TD
     style Builder fill:#b45309,stroke:#78350f,stroke-width:2px,color:#ffffff
     style Critic fill:#b45309,stroke:#78350f,stroke-width:2px,color:#ffffff
     style Fixer fill:#b45309,stroke:#78350f,stroke-width:2px,color:#ffffff
+    style Patch fill:#b45309,stroke:#78350f,stroke-width:2px,color:#ffffff
     style Hook fill:#374151,stroke:#0f172a,stroke-width:2px,color:#ffffff
     style Verdict fill:#374151,stroke:#0f172a,stroke-width:2px,color:#ffffff
 ```

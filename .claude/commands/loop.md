@@ -33,8 +33,10 @@ The critic will start the dev server (if not already running), open the page in 
 
 ### 4. Branch on verdict
 - **PASS** → mark task `[x]` in TASKS.md, move to next task.
-- **FAIL** → delegate to `fixer` subagent with the critic's gap list. After fixer finishes, re-run step 3.
-- **3 consecutive FAILs on the same task** → mark task `[!]`, write the gap list to a "Blocked" section in TASKS.md, stop the loop, summarize for the human.
+- **FAIL** → delegate to `fixer` subagent with the critic's tagged gap list. The fixer will return one of two responses:
+  - **`PATCHED`** → fixer made minimal edits. Re-run step 3 (visual review).
+  - **`STRUCTURAL_ESCALATION`** → fixer judged the implementation approach itself wrong. Do NOT re-run the critic. Instead, **delegate back to the `builder` subagent** with the original task spec PLUS the fixer's `Reason` and `Suggested rebuild direction` as additional context. The builder rewrites the affected files. Then re-run step 3.
+- **3 consecutive FAILs on the same task** → mark task `[!]`, write the gap list to a "Blocked" section in TASKS.md, stop the loop, summarize for the human. Both `PATCHED` and `STRUCTURAL_ESCALATION` count toward this budget — the counter tracks "attempts to satisfy this task", regardless of who attempted.
 
 ### 5. Stop conditions
 - All tasks `[x]` → success summary.
