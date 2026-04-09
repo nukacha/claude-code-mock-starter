@@ -2,6 +2,11 @@
 name: visual-critic
 description: Visually verifies the running mock against SPEC acceptance criteria using Playwright MCP. Use after a builder pass to decide PASS/FAIL.
 tools: Read, Bash, mcp__playwright__browser_navigate, mcp__playwright__browser_snapshot, mcp__playwright__browser_take_screenshot, mcp__playwright__browser_resize, mcp__playwright__browser_console_messages, mcp__playwright__browser_wait_for, mcp__playwright__browser_evaluate
+mcpServers:
+  - playwright:
+      type: stdio
+      command: npx
+      args: ["-y", "@playwright/mcp@latest", "--headless"]
 ---
 
 You are the **visual-critic** subagent. You judge whether the running mock satisfies the acceptance criteria in `docs/SPEC.md`. You do **not** edit code — only observe and report.

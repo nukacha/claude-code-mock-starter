@@ -79,11 +79,8 @@ npm run msw:init
 ```
 初回は数分かかります。エラーが出た場合は Node.js のバージョン (`node -v`) が 24 以上か確認してください。
 
-### 3. Playwright MCP のセットアップ（必須）
-AIが「ブラウザでスクリーンショットを撮って自分で確認する」ための仕組みです。視覚的自己改善ループの中核なので必須。
-
-#### 3-1. ブラウザ（Chromium）をインストール
-Playwright は実際のブラウザを動かすため、最初に Chromium をダウンロードします。
+### 3. Chromium のインストール（必須）
+AIは Playwright を使ってモックのスクリーンショットを撮り、自分の作業結果を確認します。Playwright は実際のブラウザを必要とするので、最初に Chromium をダウンロードします:
 ```bash
 npx -y playwright@latest install chromium
 ```
@@ -95,23 +92,9 @@ sudo npx -y playwright@latest install-deps chromium
 ```
 パスワードを聞かれたら PC のログインパスワードを入力してください。macOS / Windows ネイティブでは不要です。
 
-#### 3-2. Claude Code に Playwright MCP を登録
-```bash
-claude mcp add playwright npx @playwright/mcp@latest -- --headless
-```
-※ `--headless` を付けることで「画面を表示せず裏でブラウザを動かす」モードになります。WSL2 や画面なしのサーバーでも安定して動かすために推奨です。画面付きで動作を見たい場合は `--headless` を外してください。
-
-#### 3-3. インストール確認
-新しいターミナルで `claude` を起動し、対話画面で次を実行:
-```
-/mcp
-```
-一覧に `playwright` が `connected` として表示されればOKです。
-表示されない場合はターミナルを開き直してから再度試してください。
-
-#### 💡 補足
-- 1回設定すれば保存されるので、次回以降このステップは不要です。
-- ブラウザのダウンロード先: macOS は `~/Library/Caches/ms-playwright/`、Linux/WSL は `~/.cache/ms-playwright/`、Windows は `%USERPROFILE%\AppData\Local\ms-playwright\`
+> 💡 **`claude mcp add playwright ...` を実行する必要はありません。** このテンプレートは Playwright MCP サーバーの定義を [visual-critic agent](.claude/agents/visual-critic.md) のフロントマターに直接埋め込んでいるので、必要な時だけ自動で起動し、エージェント終了時に自動で停止します。初回 `/loop`（または `/review`）実行時に Claude Code がセキュリティ確認のプロンプトを出すので、一度承認すれば以降は自動で動きます。
+>
+> ブラウザのダウンロード先: macOS は `~/Library/Caches/ms-playwright/`、Linux/WSL は `~/.cache/ms-playwright/`、Windows は `%USERPROFILE%\AppData\Local\ms-playwright\`
 
 ### 4. Claude Code を起動
 プロジェクトのフォルダで:
@@ -316,9 +299,8 @@ fixer は visual-critic からの gap レポートを **fresh なコンテキス
 | `command not found: node` / `npm` | Node.js が入っていません。<https://nodejs.org/ja/download> から LTS 版をインストール |
 | `command not found: claude` | Claude Code が未インストール。`curl -fsSL https://claude.ai/install.sh \| bash`（macOS/Linux/WSL）または `irm https://claude.ai/install.ps1 \| iex`（Windows） |
 | `npm install` でエラー | `node -v` が `v24` 以上か確認。古ければ Node.js を更新 |
-| `/loop` で「Playwright MCP が見つからない」 | 手順3を実行したか確認。Claude Code 内で `/mcp` と入力して `playwright` が `connected` か確認 |
+| `/loop` で「Playwright MCP が見つからない」 | MCP サーバーは visual-critic agent に埋め込まれています。初回 `/loop` 実行時のセキュリティプロンプトを承認したか確認してください。再度プロンプトを出すには `claude mcp reset-project-choices` を実行してから `/loop` を再実行 |
 | Linux/WSL で `chromium` 起動エラー (`error while loading shared libraries`) | `sudo npx playwright install-deps chromium` を実行してシステムライブラリを入れる |
-| WSL でブラウザが画面に出ない / 固まる | 手順3-2 の `--headless` フラグが付いているか確認 |
 | ブラウザに何も表示されない | ターミナルで `npm run dev` が動いているか、URL (http://127.0.0.1:5173) が正しいか確認 |
 | Windows でうまく動かない | WSL2 上で実行することを強く推奨（上記セクション参照） |
 

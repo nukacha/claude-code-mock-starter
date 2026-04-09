@@ -78,11 +78,8 @@ npm run msw:init
 ```
 First install takes a few minutes. If you hit errors, double-check `node -v` is 24+.
 
-### 3. Set up Playwright MCP (required)
-This is how the AI screenshots its own work and verifies it visually. It's the heart of the self-improvement loop, so don't skip it.
-
-#### 3-1. Install the browser (Chromium)
-Playwright drives a real browser, so download Chromium first:
+### 3. Install Chromium for Playwright (required)
+The AI uses Playwright to screenshot the running mock and check its own work. Playwright needs a real browser binary, so download Chromium first:
 ```bash
 npx -y playwright@latest install chromium
 ```
@@ -94,22 +91,9 @@ sudo npx -y playwright@latest install-deps chromium
 ```
 Enter your machine login password if prompted. Not needed on macOS / native Windows.
 
-#### 3-2. Register Playwright MCP with Claude Code
-```bash
-claude mcp add playwright npx @playwright/mcp@latest -- --headless
-```
-The `--headless` flag runs the browser invisibly in the background — recommended for stable operation on WSL2 and headless servers. Drop the flag if you want to watch the browser as it runs.
-
-#### 3-3. Verify
-Open a fresh terminal, launch Claude Code, and inside the session run:
-```
-/mcp
-```
-You should see `playwright` listed as `connected`. If not, restart the terminal and try again.
-
-#### 💡 Notes
-- This is a one-time setup. You don't redo it next session.
-- Browser cache location: macOS `~/Library/Caches/ms-playwright/`, Linux/WSL `~/.cache/ms-playwright/`, Windows `%USERPROFILE%\AppData\Local\ms-playwright\`
+> 💡 **You do NOT need to run `claude mcp add playwright ...`.** This template embeds the Playwright MCP server definition directly inside the [visual-critic agent](.claude/agents/visual-critic.md), so it spins up automatically when needed and shuts down when the agent finishes. The first time you run `/loop` (or `/review`), Claude Code will show a security prompt asking you to approve the embedded server — click approve once and you're done.
+>
+> Browser cache location: macOS `~/Library/Caches/ms-playwright/`, Linux/WSL `~/.cache/ms-playwright/`, Windows `%USERPROFILE%\AppData\Local\ms-playwright\`
 
 ### 4. Launch Claude Code
 From the project folder:
@@ -314,9 +298,8 @@ The fixer exists to give a fresh-context agent the job of diagnosing gaps from t
 | `command not found: node` / `npm` | Node.js not installed. Get it from <https://nodejs.org/en/download> (LTS) |
 | `command not found: claude` | Claude Code not installed. `curl -fsSL https://claude.ai/install.sh \| bash` (macOS/Linux/WSL) or `irm https://claude.ai/install.ps1 \| iex` (Windows) |
 | `npm install` errors | Confirm `node -v` is `v24+`. Update Node.js if older |
-| `/loop` says "Playwright MCP not found" | Re-check step 3. Inside Claude Code run `/mcp` and confirm `playwright` is `connected` |
+| `/loop` says "Playwright MCP not found" | The MCP server is embedded in the visual-critic agent. Check that you approved the security prompt the first time you ran `/loop`. You can re-trigger it by running `claude mcp reset-project-choices` and then re-running `/loop` |
 | Linux/WSL `chromium` error (`error while loading shared libraries`) | Run `sudo npx playwright install-deps chromium` |
-| WSL browser hangs / never appears | Make sure `--headless` is set in step 3-2 |
 | Browser shows nothing | Confirm `npm run dev` is running and the URL (http://127.0.0.1:5173) is correct |
 | Doesn't work on Windows | Use WSL2 (see the Windows section above) |
 
