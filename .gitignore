@@ -31,3 +31,4 @@ tests/visual/**/*-diff.png
 
 # claude code runtime
 .claude/.cache
+.cache/

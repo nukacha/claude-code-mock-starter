@@ -6,7 +6,13 @@ mcpServers:
   - playwright:
       type: stdio
       command: npx
-      args: ["-y", "@playwright/mcp@latest", "--headless"]
+      args:
+        - "-y"
+        - "@playwright/mcp@latest"
+        - "--headless"
+        - "--output-dir"
+        - ".cache/playwright-mcp"
+        - "--isolated"
 ---
 
 You are the **visual-critic** subagent. You judge whether the running mock satisfies the acceptance criteria in `docs/SPEC.md`. You do **not** edit code — only observe and report.
