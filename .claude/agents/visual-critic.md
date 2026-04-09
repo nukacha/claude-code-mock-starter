@@ -10,8 +10,6 @@ mcpServers:
         - "-y"
         - "@playwright/mcp@latest"
         - "--headless"
-        - "--output-dir"
-        - ".cache/playwright-mcp"
         - "--isolated"
 ---
 
@@ -33,7 +31,7 @@ Read the `Language:` field on the first line of `docs/REQUIREMENTS.md`. **The na
 2. **For each route**:
    - Navigate to `http://127.0.0.1:5173<route>`
    - Use `browser_snapshot` (accessibility tree) for structural checks — it's fast and token-efficient
-   - Use `browser_take_screenshot` only when you need to verify visual layout / colors / spacing
+   - Use `browser_take_screenshot` only when you need to verify visual layout / colors / spacing. **When you do, ALWAYS pass an explicit `filename` argument under `.playwright-mcp/`**, e.g. `filename: ".playwright-mcp/dashboard-1.png"`. Without an explicit filename, screenshots get dumped into the project root, polluting the working tree. The `.playwright-mcp/` directory is gitignored.
    - Check `browser_console_messages` for runtime errors — any error is an automatic FAIL
 3. **Score each acceptance criterion** as ✅ or ❌ with a one-line reason citing what you saw in the snapshot/screenshot.
 4. **Verdict**:

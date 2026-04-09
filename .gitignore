@@ -31,4 +31,6 @@ tests/visual/**/*-diff.png
 
 # claude code runtime
 .claude/.cache
-.cache/
+
+# playwright mcp output (screenshots, snapshots, network logs from visual-critic)
+.playwright-mcp/
