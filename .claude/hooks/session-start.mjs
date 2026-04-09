@@ -11,9 +11,9 @@ const projectDir = process.env.CLAUDE_PROJECT_DIR || process.cwd();
 const messages = [];
 
 const nodeMajor = Number(process.versions.node.split(".")[0]);
-if (nodeMajor < 20) {
+if (nodeMajor < 24) {
   messages.push(
-    `[warn] Node ${process.versions.node} detected. This template targets Node >=20.11.`,
+    `[warn] Node ${process.versions.node} detected. This template targets Node >=24.`,
   );
 }
 
