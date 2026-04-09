@@ -18,7 +18,7 @@ The critic tags every gap with one of these categories:
 | `[VISUAL]` | **Patch.** Edit JSX / Tailwind classes / copy. Minimal change. |
 | `[DATA]` | **Patch.** Edit MSW handlers in `src/mocks/handlers.ts` or the component's data wiring. |
 | `[INTERACTION]` | **Patch.** Wire up missing handlers, fix routes, fix state updates. |
-| `[STRUCTURAL]` | **Do not patch. Escalate.** Return a `STRUCTURAL_ESCALATION` block (see below) without touching code. The orchestrator (`/loop`) will hand the task back to the builder for a proper redesign. |
+| `[STRUCTURAL]` | **Do not patch. Escalate.** Return a `STRUCTURAL_ESCALATION` block (see below) without touching code. The orchestrator (`/iterate`) will hand the task back to the builder for a proper redesign. |
 
 **Mixed reports**: if a report contains both patchable gaps AND a `[STRUCTURAL]` gap, escalate the whole task. Patching part of a structurally wrong implementation produces worse output than rebuilding cleanly. Do not "do what you can" — return the escalation block.
 

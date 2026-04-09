@@ -5,7 +5,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep
 
 # /tasks — Spec → Task list
 
-Decompose `docs/SPEC.md` into small, sequential tasks at `docs/TASKS.md` that the `/loop` command can execute one at a time.
+Decompose `docs/SPEC.md` into small, sequential tasks at `docs/TASKS.md` that the `/iterate` command can execute one at a time.
 
 ## Language
 **Read the `Language:` field on the first line of `docs/REQUIREMENTS.md` and write all human-facing content in `docs/TASKS.md` in that language.** Task titles, "what the user will see when done" descriptions, and the final summary must all be in the locked-in project language. The technical content inside `<details>` blocks may stay in English.
@@ -32,7 +32,7 @@ Follow `docs/TASKS.template.md` exactly.
    - **完成の目安** — checklist verifiable from a screenshot, in plain language
    - **`<details>` block** — SPEC ref, files, steps, quality gates (typecheck/lint, console errors)
 6. Keep tasks **small enough that one builder pass + one critic pass can complete them**. If a task touches more than ~5 files or feels like 2 features, split it.
-7. Stop and **summarize in plain language**: "全部で◯個のタスクがあります。順番は: 1) …, 2) …" — no jargon. Tell the user to run `/loop` when ready.
+7. Stop and **summarize in plain language**: "全部で◯個のタスクがあります。順番は: 1) …, 2) …" — no jargon. Tell the user to run `/iterate` when ready.
 
 ## Rules
 - **Plain-language parts must avoid jargon.** No "ハンドラ", "ルーティング", "コンポーネント", "props" in the visible parts. Use "画面"・"ボタン"・"表示される" etc.

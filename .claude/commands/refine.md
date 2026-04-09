@@ -36,7 +36,7 @@ If the feedback is ambiguous, use `AskUserQuestion` once to clarify scope before
 1. Identify the file(s) to edit (usually 1–3 files in `src/`).
 2. Delegate to the `builder` subagent with a tightly-scoped instruction. Builder edits the files; post-edit hook validates.
 3. Delegate to the `visual-critic` subagent for **only the affected route(s)**. Pass the user's original feedback as the acceptance criterion.
-4. If critic FAILs, delegate to `fixer` (same loop logic as `/loop` step 4). Cap at 3 retries.
+4. If critic FAILs, delegate to `fixer` (same loop logic as `/iterate` step 4). Cap at 3 retries.
 5. Report what changed. **Do not touch `docs/`**.
 
 #### TARGETED
@@ -49,7 +49,7 @@ If the feedback is ambiguous, use `AskUserQuestion` once to clarify scope before
    - If the change requires a new task: append a new task with the next ID, status `[ ]`
    - Do NOT renumber, reorder, or rewrite other tasks
 3. Run the build/critic/fix loop **only on the affected task(s)**:
-   - Same delegation pattern as `/loop` step 2-4 (builder → critic → fixer/builder)
+   - Same delegation pattern as `/iterate` step 2-4 (builder → critic → fixer/builder)
    - Same stop conditions (3 retries → escalate)
 4. Report what changed in SPEC, TASKS, and which tasks were rerun.
 
@@ -78,4 +78,4 @@ Summarize in 3–5 bullets in the project language:
 - **Never edit unrelated SPEC sections or TASKS entries.** If you find yourself wanting to "improve" something the user didn't mention, stop.
 - **Always pick the shallowest depth that works.** SURFACE > TARGETED > STRUCTURAL. Going one level shallower is almost always cheaper to undo than going one level deeper.
 - **If the change touches more than ~3 SPEC sections, escalate to STRUCTURAL** and ask the user before proceeding. That's a signal you mis-classified.
-- **Respect the post-edit hook.** Like `/loop`, builder failures from typecheck/lint must be fixed in-place, not bypassed.
+- **Respect the post-edit hook.** Like `/iterate`, builder failures from typecheck/lint must be fixed in-place, not bypassed.

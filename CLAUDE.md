@@ -16,7 +16,7 @@ A GitHub Template for building **browser-runnable UI mocks** at maximum speed us
 1. `/discover` — interactive interview → `docs/REQUIREMENTS.md`
 2. `/spec` — `docs/REQUIREMENTS.md` → `docs/SPEC.md`
 3. `/tasks` — `docs/SPEC.md` → `docs/TASKS.md`
-4. `/loop` — autonomous build/critique/fix until tasks complete or budget exhausted
+4. `/iterate` — autonomous build/critique/fix until tasks complete or budget exhausted
 
 The human approves at each `→`. Don't auto-advance.
 

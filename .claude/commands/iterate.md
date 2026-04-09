@@ -1,9 +1,9 @@
 ---
-description: Autonomously execute TASKS.md with build → visual-critic → fix loop
+description: Autonomously iterate through TASKS.md with build → visual-critic → fix cycles
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task
 ---
 
-# /loop — Self-improving build loop
+# /iterate — Self-improving build loop
 
 Execute `docs/TASKS.md` autonomously. The human has approved the spec and tasks; from here on, **only requirements changes and final review require human input**. Everything else — coding, building, screenshotting, critiquing, fixing — is yours.
 
@@ -12,10 +12,10 @@ Execute `docs/TASKS.md` autonomously. The human has approved the spec and tasks;
 
 ## Preconditions
 - `docs/SPEC.md` and `docs/TASKS.md` exist. If not, stop and tell the user which command to run.
-- The Playwright MCP server is registered. If `mcp__playwright__*` tools are unavailable, stop and tell the user to run `claude mcp add playwright npx @playwright/mcp@latest`.
+- The visual-critic subagent has Playwright MCP embedded in its frontmatter, so MCP registration is automatic. If the user hasn't approved the security prompt yet, tell them to approve it the first time visual-critic runs.
 
 ## Budget (read from settings.json env)
-- Max tasks per `/loop` invocation: `$MOCK_LOOP_MAX_TASKS` (default 20)
+- Max tasks per `/iterate` invocation: `$MOCK_LOOP_MAX_TASKS` (default 20)
 - Max critic retries per task: `$MOCK_LOOP_MAX_RETRIES` (default 3)
 
 ## Loop body
@@ -43,7 +43,7 @@ The critic will start the dev server (if not already running), open the page in 
 
 ### 5. Stop conditions
 - All tasks `[x]` → success summary.
-- Budget reached → progress summary, tell user to re-run `/loop`.
+- Budget reached → progress summary, tell user to re-run `/iterate`.
 - Any task blocked 3x → escalate.
 
 ## Final report

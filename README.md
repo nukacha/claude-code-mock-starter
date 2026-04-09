@@ -91,7 +91,7 @@ sudo npx -y playwright@latest install-deps chromium
 ```
 Enter your machine login password if prompted. Not needed on macOS / native Windows.
 
-> 💡 **You do NOT need to run `claude mcp add playwright ...`.** This template embeds the Playwright MCP server definition directly inside the [visual-critic agent](.claude/agents/visual-critic.md), so it spins up automatically when needed and shuts down when the agent finishes. The first time you run `/loop` (or `/review`), Claude Code will show a security prompt asking you to approve the embedded server — click approve once and you're done.
+> 💡 **You do NOT need to run `claude mcp add playwright ...`.** This template embeds the Playwright MCP server definition directly inside the [visual-critic agent](.claude/agents/visual-critic.md), so it spins up automatically when needed and shuts down when the agent finishes. The first time you run `/iterate` (or `/review`), Claude Code will show a security prompt asking you to approve the embedded server — click approve once and you're done.
 >
 > Browser cache location: macOS `~/Library/Caches/ms-playwright/`, Linux/WSL `~/.cache/ms-playwright/`, Windows `%USERPROFILE%\AppData\Local\ms-playwright\`
 
@@ -108,7 +108,7 @@ Inside the Claude Code session, just run these slash commands in order:
 /discover    # 1. AI interviews you → REQUIREMENTS doc
 /spec        # 2. AI converts requirements → SPEC
 /tasks       # 3. AI breaks SPEC into implementation tasks
-/loop        # 4. AI builds → reviews → fixes autonomously (hands-off)
+/iterate        # 4. AI builds → reviews → fixes autonomously (hands-off)
 ```
 Between each step, Claude asks "ready to proceed?" — read the doc and approve if it looks right.
 
@@ -140,7 +140,7 @@ It auto-detects the depth of your feedback and runs the minimum needed:
 | **TARGETED** | Surgically updates the affected SPEC section + the affected TASKS entry. Runs builder→critic→fixer on just that one task. | "add a search box on the dashboard", "show product price in the card", "add a settings page" |
 | **STRUCTURAL** | Updates REQUIREMENTS.md surgically and asks how you want to propagate it (re-run `/spec`, surgical multi-section update, or just save for later). | "change target users from B2B to consumer", "make the whole thing dark-themed" |
 
-**Why this matters**: re-running the full `/discover → /spec → /tasks → /loop` pipeline for every small change wastes time and risks the AI re-deciding things you already approved. `/refine` keeps the work you already have.
+**Why this matters**: re-running the full `/discover → /spec → /tasks → /iterate` pipeline for every small change wastes time and risks the AI re-deciding things you already approved. `/refine` keeps the work you already have.
 
 If `/refine` chooses the wrong depth, just tell it: "no, this is a bigger change than that" — it'll re-classify.
 
@@ -151,15 +151,15 @@ If `/refine` chooses the wrong depth, just tell it: "no, this is a bigger change
 
 ---
 
-## ⚡ Tip: fully hands-off `/loop`
+## ⚡ Tip: fully hands-off `/iterate`
 
-`/loop` makes the AI edit files and run `npm` commands autonomously, but by default Claude Code asks for permission on each operation. **If you want to walk away while the loop runs**, launch Claude Code in "skip permissions" mode:
+`/iterate` makes the AI edit files and run `npm` commands autonomously, but by default Claude Code asks for permission on each operation. **If you want to walk away while the loop runs**, launch Claude Code in "skip permissions" mode:
 
 ```bash
 claude --dangerously-skip-permissions
 ```
 
-In this mode, no confirmation prompts appear and `/loop` runs fully hands-off — useful when you want to grab coffee or sleep while the mock builds itself.
+In this mode, no confirmation prompts appear and `/iterate` runs fully hands-off — useful when you want to grab coffee or sleep while the mock builds itself.
 
 ### ⚠️ Before you use it
 - **It is named "dangerous" for a reason.** You lose the chance to stop a runaway agent.
@@ -173,7 +173,7 @@ In this mode, no confirmation prompts appear and `/loop` runs fully hands-off �
   - You haven't yet seen how the AI behaves (try a few normal-mode runs first)
 
 ### Tips for safe use
-1. Run `/loop` in normal mode the first few times to observe the AI's behavior
+1. Run `/iterate` in normal mode the first few times to observe the AI's behavior
 2. Once you're comfortable and committing to Git regularly, try `--dangerously-skip-permissions`
 3. You can always hit `Ctrl+C` to stop the loop at any time
 
@@ -201,7 +201,7 @@ From there, follow the Quick Start above.
 ## 🔄 How the self-improvement loop works
 
 ### Overall flow
-The human only reviews at the three ✋ points. Everything after `/loop` runs hands-off.
+The human only reviews at the three ✋ points. Everything after `/iterate` runs hands-off.
 
 ```mermaid
 flowchart TD
@@ -211,7 +211,7 @@ flowchart TD
     C --> R2{✋ human review}
     R2 --> D[/tasks<br/>break into small units/]
     D --> R3{✋ human review}
-    R3 --> E[/loop<br/>hands-off from here 🤖/]
+    R3 --> E[/iterate<br/>hands-off from here 🤖/]
     E --> F([🎉 finished mock])
 
     style A fill:#b45309,stroke:#78350f,stroke-width:2px,color:#ffffff
@@ -225,7 +225,7 @@ flowchart TD
     style R3 fill:#b91c1c,stroke:#7f1d1d,stroke-width:2px,color:#ffffff
 ```
 
-### Inside `/loop`
+### Inside `/iterate`
 ```mermaid
 flowchart TD
     Start([next task]) --> Builder[🛠 builder agent<br/>writes code]
@@ -283,7 +283,7 @@ The fixer exists to give a fresh-context agent the job of diagnosing gaps from t
 │   └── lib/utils.ts         # cn() and other tiny helpers
 └── .claude/
     ├── settings.json        # hooks / permissions
-    ├── commands/            # /discover /spec /tasks /loop /review
+    ├── commands/            # /discover /spec /tasks /iterate /review
     ├── agents/              # builder / visual-critic / fixer / planner
     ├── hooks/               # cross-platform Node hooks
     └── skills/              # on-demand pattern references
@@ -298,7 +298,7 @@ The fixer exists to give a fresh-context agent the job of diagnosing gaps from t
 | `command not found: node` / `npm` | Node.js not installed. Get it from <https://nodejs.org/en/download> (LTS) |
 | `command not found: claude` | Claude Code not installed. `curl -fsSL https://claude.ai/install.sh \| bash` (macOS/Linux/WSL) or `irm https://claude.ai/install.ps1 \| iex` (Windows) |
 | `npm install` errors | Confirm `node -v` is `v24+`. Update Node.js if older |
-| `/loop` says "Playwright MCP not found" | The MCP server is embedded in the visual-critic agent. Check that you approved the security prompt the first time you ran `/loop`. You can re-trigger it by running `claude mcp reset-project-choices` and then re-running `/loop` |
+| `/iterate` says "Playwright MCP not found" | The MCP server is embedded in the visual-critic agent. Check that you approved the security prompt the first time you ran `/iterate`. You can re-trigger it by running `claude mcp reset-project-choices` and then re-running `/iterate` |
 | Linux/WSL `chromium` error (`error while loading shared libraries`) | Run `sudo npx playwright install-deps chromium` |
 | Browser shows nothing | Confirm `npm run dev` is running and the URL (http://127.0.0.1:5173) is correct |
 | Doesn't work on Windows | Use WSL2 (see the Windows section above) |

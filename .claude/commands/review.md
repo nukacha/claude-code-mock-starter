@@ -5,7 +5,7 @@ allowed-tools: Read, Bash, Task
 
 # /review — One-shot visual review
 
-Run the `visual-critic` subagent against the current mock without entering the full `/loop`. Useful for ad-hoc checks after manual edits.
+Run the `visual-critic` subagent against the current mock without entering the full `/iterate`. Useful for ad-hoc checks after manual edits.
 
 ## Language
 Read the `Language:` field on the first line of `docs/REQUIREMENTS.md` and produce the final report in that language. Pass the preference to the visual-critic subagent.
