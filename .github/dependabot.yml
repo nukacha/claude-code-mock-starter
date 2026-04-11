@@ -46,6 +46,7 @@ updates:
           - "eslint"
           - "@eslint/*"
           - "typescript-eslint"
+          - "eslint-plugin-react-hooks"
         update-types:
           - minor
           - patch
@@ -54,6 +55,7 @@ updates:
           - "eslint"
           - "@eslint/*"
           - "typescript-eslint"
+          - "eslint-plugin-react-hooks"
         update-types:
           - major
       tailwind:
@@ -73,6 +75,7 @@ updates:
         patterns:
           - "vite"
           - "@vitejs/*"
+          - "vitest"
         update-types:
           - minor
           - patch
@@ -80,6 +83,7 @@ updates:
         patterns:
           - "vite"
           - "@vitejs/*"
+          - "vitest"
         update-types:
           - major
       minor-and-patch:
